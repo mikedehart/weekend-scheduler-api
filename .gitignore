@@ -59,3 +59,7 @@ typings/
 
 # next.js build output
 .next
+
+# Ignore config files with DB information
+server/config/development.js
+server/config/production.js
