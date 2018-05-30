@@ -21,7 +21,6 @@ try {
 } catch(err) {
 	envConfig = {};
 }
-
 // merge two config files together. envConfig will overwrite
 // redundancies on config object.
 module.exports = _.merge(config, envConfig);
