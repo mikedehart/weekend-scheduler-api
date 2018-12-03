@@ -8,18 +8,29 @@
 */
 
 const CronJob = require('cron').CronJob;
+const weekends = require('./weekendCalc');
 
-// example
-// var CronJob = require('cron').CronJob;
-// var job = new CronJob('00 30 11 * * 1-5', function() {
-  
-//    * Runs every weekday (Monday through Friday)
-//    * at 11:30:00 AM. It does not run on Saturday
-//    * or Sunday.
-   
-//   }, function () {
-//     /* This function is executed when the job stops */
-//   },
-//   true, /* Start the job right now */
-//   timeZone /* Time zone of this job. */
-// );
+
+// Updates on Dec 1 for the next year.
+//let job = new CronJob('30 * * * * *', function() {
+let job = new CronJob('00 00 09 01 11 *', function() {
+	let date = new Date();
+	let yr = date.getFullYear() +1;
+	let products = ['ASE', 'IQ', 'REP'];
+	for(let i = 0; i<12;i++) {
+		let monthlyWeekends = weekends.getWeekends(i, yr);
+		monthlyWeekends.map((wknd) => {
+			//weekendList.push(wknd);
+		});
+
+		for(let y = 0; y<products.length; y++) {
+			monthlyWeekends.map((wknd) => {
+				wknd.product = products[y];
+			});
+			weekends.addWeekends(monthlyWeekends);
+		}
+	}
+
+}, function() {
+	console.log('job stopped');
+}, true, 'America/New_York');

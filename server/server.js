@@ -3,8 +3,13 @@ const express = require('express');
 // local requires
 const logger = require('./util/logger');
 const config = require('./config/config');
+const auth = require('./auth/routes');
+const api = require('./api/routes');
+
+const cronjob = require('./util/dateCron');
 
 const app = express();
+
 
 require('mongoose').connect(config.db.url, config.db.options);
 
@@ -15,20 +20,23 @@ if(config.seed) {
 // setup app middleware
 require('./middleware/middleware')(app);
 
-// setup the API
-// TODO: set up API
+// Setup API and Auth routes
+app.use('/api', api);
+app.use('/auth', auth);
 
-
-// set up global error handling
+// Global error handling
 app.use((err, req, res, next) => {
-	// error thrown from jwt validation check
+	// Error thrown from jwt validation check
+	// If token invalid or doesn't exist, redirect to LDAP signin
 	if (err.name === 'UnauthorizedError') {
-		res.status(401).send('Invalid token!');
+		logger.log('UnauthorizedError hit, redirecting to /ldap')
+		res.redirect('/auth/ldap');
 		return;
 	}
 
 	logger.error(err.stack);
-	res.status(500).send('ERROR');
+	res.status(500).send(err.stack);
 });
 
+// export the app for testing
 module.exports = app;

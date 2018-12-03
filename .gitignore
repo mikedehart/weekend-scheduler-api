@@ -60,6 +60,10 @@ typings/
 # next.js build output
 .next
 
+# Excel files
+*.xlsx
+*.xls
+
 # Ignore config files with DB information
 server/config/development.js
 server/config/production.js
