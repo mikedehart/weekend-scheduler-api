@@ -32,6 +32,10 @@ const dateSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
+	locked: {
+		type: Boolean,
+		default: true
+	},
 	product: {
 		type: String,
 		maxlength: 3,

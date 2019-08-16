@@ -53,10 +53,6 @@ exports.get = function(req, res, next) {
   }
 };
 
-exports.getSpecific = function(req, res, next) {
-
-};
-
 exports.getOne = function(req, res, next) {
   var date = req.date;
   res.json(date);
