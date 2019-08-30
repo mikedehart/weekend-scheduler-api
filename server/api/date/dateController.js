@@ -21,6 +21,7 @@ exports.params = function(req, res, next, id) {
 exports.get = function(req, res, next) {
   // If query params are set, return output based on those
   // otherwise, return all dates (big list!)
+  console.log(req.query);
   if (!req.query.product) {
     Dates.find({})
     .populate('users', 'username')
@@ -32,11 +33,13 @@ exports.get = function(req, res, next) {
       next(err);
     });
   } else {
+    // TODO: add default value if a param isn't included?
     //const _qtr = parseInt(req.query.qtr, 10);
     //const _year = parseInt(req.query.year, 10);
-    const _qtr = req.query.qtr;
-    const _year = req.query.year;
-    const _product = req.query.product;
+    const _qtr = req.query.qtr || "";
+    const _year = req.query.year || "";
+    const _product = req.query.product || "";
+    console.log(_qtr, _year, _product);
     Dates.find({
       qtr: _qtr,
       year: _year,

@@ -29,7 +29,7 @@ exports.getWeekends = (month, year) => {
 	const _year = parseInt(year, 10);
 	const _month = parseInt(month, 10);
 	const currentMonth = _month;
-	let qtr = getQtr(_month);
+	let qtr = this.getQtr(_month);
 	let initialDate = new Date(_year, _month, 1);
 	let weekends = [];
 
@@ -67,46 +67,47 @@ exports.getWeekends = (month, year) => {
 exports.addWeekends = (weekends) => {
 	const allWeekends = weekends;
 	try {
-		console.log('ADDING WEEKENDS: ', allWeekends);
 		allWeekends.forEach((weekend) => {
 			Dates.create(weekend)
 				.then((date) => {
-					logger.log(`Date added: ${date}`);
+					logger.log(`Date added: ${date.date} ${date.product}`);
 				})
 				.catch((e) => {
-					logger.error(e)
+					logger.error("Error in addWeekend: ", e);
 				});
-	});
+		});
 	} catch (err) {
 		logger.error(`Error adding weekends: ${err.stack}`);
 	}
 };
 
 
-function getQtr(month) {
-	let _month = parseInt(month, 10);
+exports.getQtr = (month) => {
+	let _month = month;
+	let _qtr = 0;
 	switch(_month) {
 		case 0:
 		case 1:
 		case 2:
-			return 1;
+			_qtr = 1;
 			break;
 		case 3:
 		case 4:
 		case 5:
-			return 2;
+			_qtr = 2;
 			break;
 		case 6:
 		case 7:
 		case 8:
-			return 3;
+			_qtr = 3;
 			break;
 		case 9:
 		case 10:
 		case 11:
-			return 4;
+			_qtr = 4;
 			break;
 		default:
-			return null;
+			_qtr = 0;
 	}
+	return _qtr;
 };

@@ -4,5 +4,6 @@ const router = require('express').Router();
 router.use('/users', require('./user/userRoutes'));
 router.use('/dates/user', require('./date/userDate/userDateRoutes'));
 router.use('/dates', require('./date/dateRoutes'));
+router.use('/quarters', require('./quarter/quarterRoutes'));
 
 module.exports = router;
