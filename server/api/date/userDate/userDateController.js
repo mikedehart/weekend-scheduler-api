@@ -38,12 +38,14 @@ exports.put = function(req, res, next) {
 	let userExists = _.some(req.date.users, function(user) {
 		return user._id.toString() === req.body.id;
 	});
-	console.log(userExists);
+	// admin override to select multiple dates
+	const _designation = req.body.designation;
+	console.log("Adduser: ", userExists, _designation);
 	if(req.date.users.length >= 2) {
 		res.status(500).send('Selected date is already full');
 		return;
-	} else if(userExists) {
-		res.status(500).send('User is alredy registered for this day');
+	} else if(userExists && _designation !== 'TSM' ) {
+		res.status(500).send('User is already registered for this day');
 		return;
 	} else {
 		let newUser = { _id: req.body.id };
