@@ -8,12 +8,18 @@
 
 const CronJob = require('cron').CronJob;
 const weekends = require('./weekendCalc');
+const holidays = require('./holidayCalc');
 const Quarters = require('../api/quarter/quarterModel');
+const config = require('../config/config');
+const fs = require('fs');
 
+/*********************
+ Weekend CronJob
+ *********************/
 
 // Updates on Dec 1 for the next year.
 //let job = new CronJob('30 * * * * *', function() {
-let job = new CronJob('00 00 09 01 11 *', function() {
+let dateJob = new CronJob('00 00 09 01 11 *', function() {
 	let date = new Date();
 	let yr = date.getFullYear() +1;
 	let products = ['ASE', 'IQ', 'REP'];
@@ -21,7 +27,9 @@ let job = new CronJob('00 00 09 01 11 *', function() {
 		let monthlyWeekends = weekends.getWeekends(i, yr);
 		let qtrVal = weekends.getQtr(i);
 
-		Quarters.findOneOrCreate({quarter: qtrVal, year: yr}, {quarter: qtrVal, year: yr})
+		// Doesn't work great...
+		// Qtrs all created, but still throw error for duplicate qtrs (see quarterModel)
+		Quarters.findOneOrCreate({quarter: qtrVal, year: yr}, {quarter: qtrVal, year: yr, locked: true})
 			.then((res) => {
 				console.log("Qtr added/confirmed: ", res.quarter, res.year);
 			})
@@ -38,5 +46,46 @@ let job = new CronJob('00 00 09 01 11 *', function() {
 	}
 
 }, function() {
-	console.log('job stopped');
+	console.log('dateJob stopped');
+}, true, 'America/New_York');
+
+/*********************
+ Holiday CronJob
+ *********************/
+
+
+//let job = new CronJob('10 * * * * *', function() {
+let holidayJob = new CronJob('00 00 09 01 11 *', function() {
+
+
+if(fs.existsSync('holidays.csv')) {
+	const holidayArray = holidays.readHolidays('holidays.csv');
+	if(holidayArray) {
+		holidays.addHolidays(holidayArray)
+			.then((dates) => {
+				if(!dates) {
+					console.error('No dates returned!');
+				}
+				const holidayYear = dates[0].year;
+				const archivedFile = `${config.logger.holidays}holidays_${holidayYear}.csv`;
+				holidays.removeDupDates(dates)
+					.then((dates) => {
+						holidays.archiveHolidays('holidays.csv', archivedFile);
+					})
+					.catch((err) => {
+						console.error(err);
+						throw new Error(err);
+					});
+			})
+			.catch((err) => {
+				console.error(err);
+				throw new Error(err);
+			});
+	}
+} else {
+	console.log('No holiday file exists! Skipping...');
+}
+
+}, function() {
+	console.log('holidayJob stopped');
 }, true, 'America/New_York');

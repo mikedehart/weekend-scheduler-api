@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var logger = require('../../util/logger');
-var controller = require('./dateController');
+var controller = require('./holidayController');
 var auth = require('../../auth/auth');
 
 // authentication middleware for secured routes

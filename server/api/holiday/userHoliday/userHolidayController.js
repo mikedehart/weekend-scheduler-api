@@ -1,15 +1,15 @@
-const Dates = require('../dateModel');
+const Holidays = require('../holidayModel');
 const User = require('../../user/userModel');
 const _ = require('lodash');
 const logger = require('../../../util/logger');
 
 exports.params = function(req, res, next, id) {
-  Dates.findById(id)
+  Holidays.findById(id)
     .populate('users', 'username')
     .exec()
     .then(function(date) {
       if (!date) {
-        next(new Error('No date with that id'));
+        next(new Error('No holiday with that id'));
       } else {
         req.date = date;
         next();
@@ -22,7 +22,7 @@ exports.params = function(req, res, next, id) {
 
 // Get all dates that user is assigned to
 exports.get = function(req, res, next) {
-	Dates.find({ 'users': req.body.id })
+	Holidays.find({ 'users': req.body.id })
       .then((dates) => {
         res.json(dates);
       }, (err) => next(err));
@@ -41,7 +41,7 @@ exports.put = function(req, res, next) {
 	// admin override to select multiple dates
 	const _designation = req.body.designation;
 	if(req.date.users.length >= 2) {
-		res.status(500).send('Selected date is already full');
+		res.status(500).send('Selected holiday is already full');
 		return;
 	} else if(userExists && _designation !== 'TSM' ) {
 		res.status(500).send('User is already registered for this day');
@@ -51,9 +51,9 @@ exports.put = function(req, res, next) {
 		User.findById(newUser)
 			.then((user) => {
 				if(req.date.product !== user.product && _designation !== 'TSM') {
-					res.status(500).send('User/date products do not match!');
+					res.status(500).send('User/holiday products do not match!');
 				} else {
-					Dates.findOneAndUpdate({ _id: req.date._id }, 
+					Holidays.findOneAndUpdate({ _id: req.date._id }, 
 					    { $push: { users: user._id }},
 					    {new: true })
 					    .then((updatedDate) => {
@@ -61,7 +61,7 @@ exports.put = function(req, res, next) {
 					    })
 					    .catch((err) => {
 					    	logger.error(err);
-					    	res.status(500).send('Error adding user to date');
+					    	res.status(500).send('Error adding user to holiday');
 					    });
 				}
 			})
@@ -79,7 +79,7 @@ exports.delete = function(req, res, next) {
 
 	if (req.date.users.length === 2 && req.date.users[0].username === req.date.users[1].username) {
 		let newArray = [req.date.users[0]];
-		Dates.findOneAndUpdate({ _id: req.date._id},
+		Holidays.findOneAndUpdate({ _id: req.date._id},
 			{ $set: { users: newArray }},
 			{new: true, safe: true})
 			.exec()
@@ -88,13 +88,12 @@ exports.delete = function(req, res, next) {
 			})
 			.catch((err) => next(err));
 	} else {
-		Dates.findOneAndUpdate({ _id: req.date._id },
+		Holidays.findOneAndUpdate({ _id: req.date._id },
 		    { $pull: { users: deletedUser }},
 		    {new: true, safe: true})
 		    .exec()
 		    .then((updatedDate) => {
 		      res.json(updatedDate);
-		    }, (err) => next(err));
+		    }, (err) => next(err))
 	}
-	
 };

@@ -13,16 +13,16 @@ const app = express();
 
 require('mongoose').connect(config.db.url, config.db.options);
 
-if(config.seed) {
-	require('./util/seed');
-}
-
 // setup app middleware
 require('./middleware/middleware')(app);
 
 // Setup API and Auth routes
 app.use('/api', api);
 app.use('/auth', auth);
+
+const test = require('./util/holidayCalc');
+
+//test.readHolidays();
 
 // Global error handling
 app.use((err, req, res, next) => {

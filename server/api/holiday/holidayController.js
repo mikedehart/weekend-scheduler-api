@@ -1,21 +1,21 @@
-var Dates = require('./dateModel');
+var Holidays = require('./holidayModel');
 var _ = require('lodash');
 var logger = require('../../util/logger');
 
 /*
   If ID is sent, params called first to match with date
-  then date saved to req.date.
+  then date saved to req.holiday.
 */
 
 exports.params = function(req, res, next, id) {
-  Dates.findById(id)
+  Holidays.findById(id)
     .populate('users', 'username')
     .exec()
-    .then(function(date) {
-      if (!date) {
+    .then(function(holiday) {
+      if (!holiday) {
         next(new Error('No date with that id'));
       } else {
-        req.date = date;
+        req.holiday = holiday;
         next();
       }
     }, function(err) {
@@ -24,15 +24,15 @@ exports.params = function(req, res, next, id) {
 };
 
 /*
-  Get dates.
-  - If query params set, return output based on those
-  - Note: product MUST be sent or query is not read
-  - Otherwise, return all dates
+	Get holiday dates.
+	- If query params set, return output based on those
+	- Note: product MUST be sent or query is not read
+	- Otherwise, return all holidays
 */
 
 exports.get = function(req, res, next) {
   if (!req.query.product) {
-    Dates.find({})
+    Holidays.find({})
     .populate('users', 'username')
     .sort({ dateid: 1})
     .exec()
@@ -43,13 +43,9 @@ exports.get = function(req, res, next) {
     });
   } else {
     // TODO: add default value if a param isn't included?
-    //const _qtr = parseInt(req.query.qtr, 10);
-    //const _year = parseInt(req.query.year, 10);
-    const _qtr = req.query.qtr || "";
     const _year = req.query.year || "";
     const _product = req.query.product || "";
-    Dates.find({
-      qtr: _qtr,
+    Holidays.find({
       year: _year,
       product: _product
     })
@@ -64,28 +60,35 @@ exports.get = function(req, res, next) {
   }
 };
 
-exports.getOne = function(req, res, next) {
-  var date = req.date;
-  res.json(date);
-};
-
 /*
 
-  Below are PUT/POST/DELETE values for
-  updating, adding, deleting dates. 
-  - These are NOT used by the front-end. Dates
-  are auto-generated though dateCron.js
-  - Kept here for emergency date fixing.
+	Get a single date (assumes id was passed). Should
+	be assigned to req.holiday
 
 */
 
+exports.getOne = function(req, res, next) {
+  var holiday = req.holiday;
+  res.json(holiday);
+};
+
+
+/*
+
+	Below are PUT/POST/DELETE values for
+	updating, adding, deleting dates. 
+	- These are NOT used by the front-end. Dates
+	are auto-generated though dateCron.js
+	- Kept here for emergency date fixing.
+
+*/
 exports.put = function(req, res, next) {
-  var date = req.date;
+  var holiday = req.holiday;
   var update = req.body;
 
-  _.merge(date, update);
+  _.merge(holiday, update);
 
-  date.save(function(err, saved) {
+  holiday.save(function(err, saved) {
     if (err) {
       next(err);
     } else {
@@ -96,7 +99,7 @@ exports.put = function(req, res, next) {
 
 exports.post = function(req, res, next) {
   var newdate = req.body;
-  Dates.create(newdate)
+  Holidays.create(newdate)
     .then(function(date) {
       res.json(date);
     }, function(err) {
@@ -106,7 +109,7 @@ exports.post = function(req, res, next) {
 };
 
 exports.delete = function(req, res, next) {
-  req.date.remove(function(err, removed) {
+  req.holiday.remove(function(err, removed) {
     if (err) {
       next(err);
     } else {

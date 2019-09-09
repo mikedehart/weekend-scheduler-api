@@ -24,7 +24,7 @@ const quarterSchema = new Schema({
 
 quarterSchema.index({ quarter: 1, year: 1}, { unique: true });
 
-
+// Not perfect. Qtrs created, but still throw dup key creation errors
 quarterSchema.statics.findOneOrCreate = function findOneOrCreate(condition, doc) {
 	const self = this;
 	const newDoc = doc;

@@ -73,7 +73,7 @@ exports.addWeekends = (weekends) => {
 					logger.log(`Date added: ${date.date} ${date.product}`);
 				})
 				.catch((e) => {
-					logger.error("Error in addWeekend: ", e);
+					logger.error("Error adding weekend: ", e);
 				});
 		});
 	} catch (err) {

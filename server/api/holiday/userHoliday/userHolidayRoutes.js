@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const logger = require('../../../util/logger');
-const controller = require('./userDateController');
+const controller = require('./userHolidayController');
 const auth = require('../../../auth/auth');
 
 const getUserId = (req, res, next) => {
