@@ -7,5 +7,6 @@ router.use('/dates', require('./date/dateRoutes'));
 router.use('/quarters', require('./quarter/quarterRoutes'));
 router.use('/holidays', require('./holiday/holidayRoutes'));
 router.use('/holidays/user', require('./holiday/userHoliday/userHolidayRoutes'));
+router.use('/altdays', require('./altday/altdayRoutes'));
 
 module.exports = router;
