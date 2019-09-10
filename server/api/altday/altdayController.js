@@ -1,6 +1,5 @@
 var Altdays = require('./altdayModel');
 var _ = require('lodash');
-var logger = require('../../util/logger');
 
 /*
   If ID is sent, params called first to match with altday
@@ -94,7 +93,6 @@ exports.post = function(req, res, next) {
 		.then(function(altday) {
 			res.json(altday);
 		}, function(err) {
-			logger.error(err);
 			next(err);
 		});
 };
