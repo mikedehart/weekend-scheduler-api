@@ -20,10 +20,6 @@ require('./middleware/middleware')(app);
 app.use('/api', api);
 app.use('/auth', auth);
 
-const test = require('./util/holidayCalc');
-
-//test.readHolidays();
-
 // Global error handling
 app.use((err, req, res, next) => {
 	// Error thrown from jwt validation check
