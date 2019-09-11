@@ -8,8 +8,8 @@ var _ = require('lodash');
 
 exports.params = function(req, res, next, id) {
   Altdays.findById(id)
-    .populate('users', 'username')
-    .populate('dates', 'date')
+    .populate('userId', 'username')
+    .populate('dateId', 'date')
     .exec()
     .then(function(date) {
       if (!date) {
@@ -33,8 +33,8 @@ exports.params = function(req, res, next, id) {
 exports.get = function(req, res, next) {
   if (!req.query.user) {
     Altdays.find({})
-    .populate('users', 'username')
-    .populate('dates', 'date')
+    .populate('userId', 'username')
+    .populate('dateId', 'date')
     .exec()
     .then(function(dates){
       res.json(dates);
@@ -42,12 +42,13 @@ exports.get = function(req, res, next) {
       next(err);
     });
   } else {
-    const _user_id = req.query.user || "";
+    const _user_id = req.query.userId || "";
     Altdays.find({
-      user: user
+      userId: user_id
     })
-    .populate('users', 'username')
-    .populate('dates', 'date')
+    .populate('userId', 'username')
+    .populate('dateId', 'date')
+    .sort({ dateId: 1 })
     .exec()
     .then(function(dates) {
       res.json(dates);

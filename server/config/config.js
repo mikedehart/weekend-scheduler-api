@@ -3,7 +3,7 @@ const _ = require('lodash');
 const config = {
 	dev: 'development',
 	prod: 'production',
-	port: process.env.NODE_PORT || 5000,
+	port: process.env.NODE_PORT || 3000,
 	expireTime: 24 * 60 * 60 * 10 // 10 days
 };
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const altdaySchema = new Schema({
-	date: {
+	dateId: {
 		type: Schema.Types.ObjectId,
 		ref: 'date',
 		required: true
@@ -15,16 +15,16 @@ const altdaySchema = new Schema({
 	year: {
 		type: Number
 	},
-	user: {
+	userId: {
 		type: Schema.Types.ObjectId,
-		ref: 'user'
+		ref: 'user',
+		required: true
 	},
 	alternative: {
-		type: String,
-		required: false
+		type: String
 	}
 });
 
-altdaySchema.index({ user: 1, date: 1}, { unique: true });
+//altdaySchema.index({ userId: 1, dateId: 1}, { unique: false });
 
 module.exports = mongoose.model('altday', altdaySchema);
