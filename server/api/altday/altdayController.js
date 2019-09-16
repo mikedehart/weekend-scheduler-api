@@ -26,22 +26,25 @@ exports.params = function(req, res, next, id) {
 
 /*
   Get altdays.
+  - If both userId and dateId are passed, search on that
   - If user_id param passed, search on that
   - Otherwise, return all dates
 */
 
 exports.get = function(req, res, next) {
-  if (!req.query.user) {
+  if (!req.query.userId || !req.query.dateId) {
+  	console.log('none triggered', req.query);
     Altdays.find({})
     .populate('userId', 'username')
     .populate('dateId', 'date')
     .exec()
-    .then(function(dates){
+    .then(function(dates) {
       res.json(dates);
-    }, function(err){
+    }, function(err) {
       next(err);
     });
-  } else {
+  } else if(!req.query.dateId) {
+  	console.log('user triggered');
     const _user_id = req.query.userId || "";
     Altdays.find({
       userId: user_id
@@ -55,13 +58,33 @@ exports.get = function(req, res, next) {
     }, function(err) {
       next(err);
     });
+  } else {
+  	console.log('both triggered');
+  	let _userId = req.query.userId || '';
+	let _dateId = req.query.dateId || '';
+	Altdays.find({
+		userId: _userId,
+		dateId: _dateId
+	})
+	.populate('userId', 'username')
+	.populate('dateId', 'date')
+	.exec()
+	.then(function(date) {
+		res.json(date);
+	}, function() {
+		next(err);
+	});
   }
 };
 
+
+// Get single altday based on id (unused in app)
 exports.getOne = function(req, res, next) {
   var altday = req.altday;
   res.json(altday);
 };
+
+
 
 /*
 	Update an altday (most likely to insert an altday)
