@@ -10,7 +10,7 @@ const altdaySchema = new Schema({
 	qtr: {
 		type: Number,
 		min: 1,
-		max: 4
+		max: 5
 	},
 	year: {
 		type: Number
