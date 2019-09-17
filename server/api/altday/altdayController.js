@@ -32,7 +32,8 @@ exports.params = function(req, res, next, id) {
 */
 
 exports.get = function(req, res, next) {
-  if (!req.query.userId || !req.query.dateId) {
+	console.log(req.query);
+  if (!req.query.userId && !req.query.dateId) {
   	console.log('none triggered', req.query);
     Altdays.find({})
     .populate('userId', 'username')
@@ -45,9 +46,9 @@ exports.get = function(req, res, next) {
     });
   } else if(!req.query.dateId) {
   	console.log('user triggered');
-    const _user_id = req.query.userId || "";
+    const _userId = req.query.userId || "";
     Altdays.find({
-      userId: user_id
+      userId: _userId
     })
     .populate('userId', 'username')
     .populate('dateId', 'date')
