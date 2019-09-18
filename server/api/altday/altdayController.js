@@ -116,7 +116,17 @@ exports.post = function(req, res, next) {
 	let newalt = req.body;
 	Altdays.create(newalt)
 		.then(function(altday) {
-			res.json(altday);
+			console.log(altday);
+			// execPopulate returns another promise
+			altday.populate('userId', 'username')
+				.populate('dateId', 'date')
+				.execPopulate()
+				.then((popaltday) => {
+					res.json(popaltday);
+				})
+				.catch((err) => {
+					next(err);
+				});
 		}, function(err) {
 			next(err);
 		});

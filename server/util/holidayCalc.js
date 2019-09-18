@@ -86,17 +86,22 @@ exports.archiveHolidays = (original_file, new_file) => {
 	});
 };
 
+//TODO: fix this. get all dates and compare?
+// Need to get dates to compare. Worth it?
+// Maybe only compare if the holiday is a sat/sun
 exports.removeDupDates = (dates) => {
 	return new Promise((resolve, reject) => {
-		const _dates = dates;
+		const _dates = dates.filter;
 		try {
+
 			_dates.forEach((date) => {
+
 				Dates.remove({ dateid: date.dateid })
 					.then((date) => {
 						if(!date)
 							logger.log(`No duplicate, skipping...`);
 						else
-							logger.log(`Date: ${date} removed.`);
+							logger.log(`Date: ${date.date} removed.`);
 
 					})
 					.catch((err) => reject(err));
