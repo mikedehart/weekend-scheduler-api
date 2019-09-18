@@ -17,9 +17,10 @@ const fs = require('fs');
  Weekend CronJob
  *********************/
 
-// Updates on Dec 1 for the next year.
+// Updates at 9pm on 1st of Oct for the next year.
+// 30-second job for testing
 //let job = new CronJob('30 * * * * *', function() {
-let dateJob = new CronJob('00 00 09 01 11 *', function() {
+let dateJob = new CronJob('00 00 21 01 09 *', function() {
 	let date = new Date();
 	let yr = date.getFullYear() +1;
 	let products = ['ASE', 'IQ', 'REP'];
@@ -53,38 +54,38 @@ let dateJob = new CronJob('00 00 09 01 11 *', function() {
  Holiday CronJob
  *********************/
 
-
-//let job = new CronJob('10 * * * * *', function() {
-let holidayJob = new CronJob('00 00 09 01 11 *', function() {
-
-
-if(fs.existsSync('holidays.csv')) {
-	const holidayArray = holidays.readHolidays('holidays.csv');
-	if(holidayArray) {
-		holidays.addHolidays(holidayArray)
-			.then((dates) => {
-				if(!dates) {
-					console.error('No dates returned!');
-				}
-				const holidayYear = dates[0].year;
-				const archivedFile = `${config.logger.holidays}holidays_${holidayYear}.csv`;
-				holidays.removeDupDates(dates)
-					.then((dates) => {
-						holidays.archiveHolidays('holidays.csv', archivedFile);
-					})
-					.catch((err) => {
-						console.error(err);
-						throw new Error(err);
-					});
-			})
-			.catch((err) => {
-				console.error(err);
-				throw new Error(err);
-			});
+// 30-second job for testing
+//let job2 = new CronJob('10 * * * * *', function() {
+// Runs every Friday at 9pm
+let holidayJob = new CronJob('00 00 21 * * 05', function() {
+	if(fs.existsSync('holidays.csv')) {
+		const holidayArray = holidays.readHolidays('holidays.csv');
+		if(holidayArray) {
+			holidays.addHolidays(holidayArray)
+				.then((dates) => {
+					if(!dates) {
+						console.error('No dates returned!');
+					}
+					const holidayYear = dates[0].year;
+					const archivedFile = `${config.logger.holidays}holidays_${holidayYear}.csv`;
+					//TODO: need to fix this. 
+					// holidays.removeDupDates(dates)
+					// 	.then((dates) => {
+					// 		holidays.archiveHolidays('holidays.csv', archivedFile);
+					// 	})
+					// 	.catch((err) => {
+					// 		console.error(err);
+					// 		throw new Error(err);
+					// 	});
+				})
+				.catch((err) => {
+					console.error(err);
+					throw new Error(err);
+				});
+		}
+	} else {
+		console.log('No holiday file exists! Skipping...');
 	}
-} else {
-	console.log('No holiday file exists! Skipping...');
-}
 
 }, function() {
 	console.log('holidayJob stopped');
