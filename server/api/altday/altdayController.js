@@ -32,7 +32,6 @@ exports.params = function(req, res, next, id) {
 */
 
 exports.get = function(req, res, next) {
-	console.log(req.query);
   if (!req.query.userId && !req.query.dateId) {
   	console.log('none triggered', req.query);
     Altdays.find({})
@@ -45,7 +44,6 @@ exports.get = function(req, res, next) {
       next(err);
     });
   } else if(!req.query.dateId) {
-  	console.log('user triggered');
     const _userId = req.query.userId || "";
     Altdays.find({
       userId: _userId
@@ -60,7 +58,6 @@ exports.get = function(req, res, next) {
       next(err);
     });
   } else {
-  	console.log('both triggered');
   	let _userId = req.query.userId || '';
 	let _dateId = req.query.dateId || '';
 	Altdays.find({
