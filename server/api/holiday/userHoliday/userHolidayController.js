@@ -1,5 +1,6 @@
 const Holidays = require('../holidayModel');
 const User = require('../../user/userModel');
+const AltDays = require('../../altday/altdayModel');
 const _ = require('lodash');
 const logger = require('../../../util/logger');
 
@@ -53,11 +54,33 @@ exports.put = function(req, res, next) {
 				if(req.date.product !== user.product && _designation !== 'TSM') {
 					res.status(500).send('User/holiday products do not match!');
 				} else {
+					let userId = user._id;
 					Holidays.findOneAndUpdate({ _id: req.date._id }, 
-					    { $push: { users: user._id }},
+					    { $push: { users: userId }},
 					    {new: true })
 					    .then((updatedDate) => {
-					      res.json(updatedDate);
+					    	let newdate = updatedDate;
+					    	AltDays.create({
+					    		dateId: updatedDate._id, 
+					    		qtr: updatedDate.qtr,
+					    		year: updatedDate.year,
+					    		userId: userId
+					    	})
+					    	.then((altday) => {
+					    		altday.populate('userId', 'username')
+									.populate('dateId', 'date')
+									.execPopulate()
+									.then((altday) => {
+										res.json({altday, newdate});
+									})
+									.catch((err) => {
+
+									})
+					    	})
+					    	.catch((err) => {
+					    		logger.error(err);
+					    		res.status(500).send('Error adding user to date');
+					    	});
 					    })
 					    .catch((err) => {
 					    	logger.error(err);
@@ -84,7 +107,22 @@ exports.delete = function(req, res, next) {
 			{new: true, safe: true})
 			.exec()
 			.then((updatedDate) => {
-				res.json(updatedDate);
+				let removeDate = updatedDate;
+				AltDays.findOne({ dateId: removeDate._id, userId: deletedUser})
+					.then((res) => {
+						AltDays.deleteOne(res)
+							.then((altday) => {
+								res.json({altday, removeDate});
+							})
+							.catch((err) => {
+								logger.error(err);
+								res.status(500).send('Error deleting altday!');
+							})
+					})
+					.catch((err) => {
+						logger.error(err);
+						res.status(500).send('Error finding altday!');
+					})
 			})
 			.catch((err) => next(err));
 	} else {
@@ -93,7 +131,22 @@ exports.delete = function(req, res, next) {
 		    {new: true, safe: true})
 		    .exec()
 		    .then((updatedDate) => {
-		      res.json(updatedDate);
+		    	let removeDate = updatedDate;
+				AltDays.findOne({ dateId: removeDate._id, userId: deletedUser})
+					.then((res) => {
+						AltDays.deleteOne(res)
+							.then((altday) => {
+								res.json({altday, removeDate});
+							})
+							.catch((err) => {
+								logger.error(err);
+								res.status(500).send('Error deleting altday!');
+							})
+					})
+					.catch((err) => {
+						logger.error(err);
+						res.status(500).send('Error finding altday!');
+					})
 		    }, (err) => next(err))
 	}
 };
