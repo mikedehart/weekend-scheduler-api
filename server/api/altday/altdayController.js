@@ -8,7 +8,7 @@ var _ = require('lodash');
 
 exports.params = function(req, res, next, id) {
   Altdays.findById(id)
-    .populate('userId', 'username')
+    .populate('userId')
     .populate('dateId', 'date')
     .exec()
     .then(function(date) {
@@ -35,7 +35,7 @@ exports.get = function(req, res, next) {
   if (!req.query.userId && !req.query.dateId) {
   	console.log('none triggered', req.query);
     Altdays.find({})
-    .populate('userId', 'username')
+    .populate('userId')
     .populate('dateId', 'date')
     .exec()
     .then(function(dates) {
@@ -48,7 +48,7 @@ exports.get = function(req, res, next) {
     Altdays.find({
       userId: _userId
     })
-    .populate('userId', 'username')
+    .populate('userId')
     .populate('dateId', 'date')
     .sort({ dateId: 1 })
     .exec()
@@ -64,7 +64,7 @@ exports.get = function(req, res, next) {
 		userId: _userId,
 		dateId: _dateId
 	})
-	.populate('userId', 'username')
+	.populate('userId')
 	.populate('dateId', 'date')
 	.exec()
 	.then(function(date) {
@@ -115,7 +115,7 @@ exports.post = function(req, res, next) {
 		.then(function(altday) {
 			console.log(altday);
 			// execPopulate returns another promise
-			altday.populate('userId', 'username')
+			altday.populate('userId')
 				.populate('dateId', 'date')
 				.execPopulate()
 				.then((popaltday) => {

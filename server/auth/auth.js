@@ -77,14 +77,12 @@ exports.verifyUser = () => {
 			return;
 		} else {
 			let iNumber = req.ntlm.UserName;
-
 			User.findOne({ inum: iNumber })
 				.then((user) => {
 					if(!user) {
 						// Valid I-num but not in database. Redirect to signup page
 						//res.status(404).send("No user exists with that I-Number.");
 						req.inum = iNumber;
-						console.log(iNumber);
 						next();
 					} else {
 						req.user = user;

@@ -65,13 +65,15 @@ exports.put = function(req, res, next) {
 					    		dateId: updatedDate._id, 
 					    		qtr: updatedDate.qtr,
 					    		year: updatedDate.year,
-					    		userId: userId 
+					    		userId: userId,
+					    		dateModel: 'date'
 					    		})
 					    	.then((altday) => {
 					    		altday.populate('userId', 'username')
 									.populate('dateId', 'date')
 									.execPopulate()
 									.then((altday) => {
+										console.log('holiday: ', {altday, newdate});
 										res.json({altday, newdate});
 									})
 									.catch((err) => {

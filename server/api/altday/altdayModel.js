@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const altdaySchema = new Schema({
 	dateId: {
 		type: Schema.Types.ObjectId,
-		ref: 'date',
-		required: true
+		required: true,
+		refPath: 'dateModel'
 	},
 	qtr: {
 		type: Number,
@@ -22,6 +22,11 @@ const altdaySchema = new Schema({
 	},
 	alternative: {
 		type: String
+	},
+	dateModel: {
+		type: String,
+		required: true,
+		enum: ['date', 'holiday']
 	}
 });
 
