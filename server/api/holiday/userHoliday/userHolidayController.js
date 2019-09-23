@@ -65,6 +65,7 @@ exports.put = function(req, res, next) {
 					    		qtr: updatedDate.qtr,
 					    		year: updatedDate.year,
 					    		userId: userId,
+					    		pay: false,
 					    		dateModel: 'holiday'
 					    	})
 					    	.then((altday) => {

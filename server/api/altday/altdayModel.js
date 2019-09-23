@@ -20,6 +20,11 @@ const altdaySchema = new Schema({
 		ref: 'user',
 		required: true
 	},
+	pay : {
+		type: Boolean,
+		required: true,
+		default: false
+	},
 	alternative: {
 		type: String
 	},
