@@ -33,7 +33,6 @@ exports.params = function(req, res, next, id) {
 
 exports.get = function(req, res, next) {
   if (!req.query.userId && !req.query.dateId) {
-  	console.log('none triggered', req.query);
     Altdays.find({})
     .populate('userId')
     .populate('dateId', 'date')
@@ -113,7 +112,6 @@ exports.post = function(req, res, next) {
 	let newalt = req.body;
 	Altdays.create(newalt)
 		.then(function(altday) {
-			console.log(altday);
 			// execPopulate returns another promise
 			altday.populate('userId')
 				.populate('dateId', 'date')

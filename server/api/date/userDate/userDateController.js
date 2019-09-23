@@ -73,7 +73,6 @@ exports.put = function(req, res, next) {
 									.populate('dateId', 'date')
 									.execPopulate()
 									.then((altday) => {
-										console.log('holiday: ', {altday, newdate});
 										res.json({altday, newdate});
 									})
 									.catch((err) => {

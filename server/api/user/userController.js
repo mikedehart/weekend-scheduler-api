@@ -7,7 +7,6 @@ const fs = require('fs');
 
 // Find user by ID, if available, and attach it to req.user
 exports.params = (req, res, next, id) => {
-	console.log('param called: ', id);
 	User.findById(id).then((user) => {
 		if(!user) {
 			// user doesn't exist. display login page.
@@ -85,11 +84,9 @@ exports.write = (req, res, next) => {
 
 		stream.on('open', function(fd) {
 			stream.write(calString);
-			console.log('after write');
 			stream.close();
 		});
 		stream.on('close', function(fd) {
-			console.log('ended');
 			fs.open(`/tmp/${fileName}`, 'r', (err, fd) => {
 				if(err) {
 					if(err.code === 'ENOENT') {
@@ -150,7 +147,6 @@ exports.post = (req, res, next) => {
 		res.status(500).send("No user details given!");
 	} else {
 		let newUser = new User(req.body);
-		console.log(newUser);
 		newUser.save((err, user) => {
 			if(err) {
 				next(err);
