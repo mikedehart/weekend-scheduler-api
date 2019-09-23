@@ -36,17 +36,18 @@ exports.get = function(req, res, next) {
 // Add a user to a date
 exports.put = function(req, res, next) {
 	// check if user already exists for this date
-	let userExists = _.some(req.date.users, function(user) {
-		return user._id.toString() === req.body.id;
-	});
+	// DISABLED: Users can choose same date twice. Saved for posterity
+	//let userExists = _.some(req.date.users, function(user) {
+	//	return user._id.toString() === req.body.id;
+	//});
 	// admin override to select multiple dates
 	const _designation = req.body.designation;
 	if(req.date.users.length >= 2) {
 		res.status(500).send('Selected date is already full');
 		return;
-	} else if(userExists && _designation !== 'TSM' ) {
-		res.status(500).send('User is already registered for this day');
-		return;
+	//} else if(userExists && _designation !== 'TSM' ) {
+	//	res.status(500).send('User is already registered for this day');
+	//	return;
 	} else {
 		let newUser = { _id: req.body.id };
 		User.findById(newUser)
@@ -66,6 +67,7 @@ exports.put = function(req, res, next) {
 					    		qtr: updatedDate.qtr,
 					    		year: updatedDate.year,
 					    		userId: userId,
+					    		pay: false,
 					    		dateModel: 'date'
 					    		})
 					    	.then((altday) => {
