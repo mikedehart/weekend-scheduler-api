@@ -31,6 +31,12 @@ const userSchema = new Schema({
 		default: "TSE",
 		validate: [designationLimit, 'Invalid designation!']
 	},
+	email: {
+		type: String
+	},
+	mgr_email: {
+		type: String
+	},
 	lastlogin: {
 		type: Date,
 		default: new Date()

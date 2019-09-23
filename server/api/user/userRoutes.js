@@ -15,6 +15,12 @@ router.route('/')
 router.route('/details')
 	.get(authMiddleware, controller.getUser) // Get current user using JWT
 
+router.route('/write')
+	.get(controller.write) // Write iCal file
+
+router.route('/download/:file')
+	.get(controller.download) // Download iCal file
+
 router.route('/:id')
   .get(controller.getOne) // get single user by Id
   .put(authMiddleware, controller.put) // update user info by Id
