@@ -67,3 +67,6 @@ typings/
 # Ignore config files with DB information
 server/config/development.js
 server/config/production.js
+
+# Ignore csv files to be parsed
+holiday*.csv
