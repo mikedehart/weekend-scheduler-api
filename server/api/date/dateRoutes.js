@@ -1,9 +1,9 @@
-var router = require('express').Router();
-var controller = require('./dateController');
-//var auth = require('../../auth/auth');
+const router = require('express').Router();
+const controller = require('./dateController');
+const auth = require('../../auth/auth');
 
 // authentication middleware for secured routes
-//const authMiddleware = [auth.decodeToken(), auth.refreshUser()];
+const authMiddleware = [auth.decodeToken(), auth.refreshUser()];
 
 // middleware to make sure signed in user is also the user
 // editing/deleting the post
@@ -19,17 +19,14 @@ const matchIds = (req, res) => {
 
 router.param('id', controller.params);
 
-//TODO: secure routes and test
-// uncomment auth and authmiddleware
-
 router.route('/')
   .get(controller.get) // get all dates
-  .post(controller.post) // add a new date
+  .post(authMiddleware, controller.post) // add a new date
 
 router.route('/:id')
   .get(controller.getOne) // get specific date
-  .put(controller.put) // update a date details (not users)
-  .delete(controller.delete) // delete a date
+  .put(authMiddleware, controller.put) // update a date details (not users)
+  .delete(authMiddleware, controller.delete) // delete a date
 
 
 module.exports = router;

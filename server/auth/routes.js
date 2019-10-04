@@ -7,8 +7,7 @@ const decode = require('./auth').decodeToken;
 
 const authMiddleware = [getLDAP, verifyUser()];
 
-//TODO: Possible to change these to post? Browser needed, but
-// browser can't issue POST request directly so maybe not possible.
+//TODO: Can referer stuff. Now using local hostname
 
 // Use decodeToken to check for valid JWT.
 // If doesn't exist, caught by error handler with 'UnauthorizedError'

@@ -1,7 +1,6 @@
-var router = require('express').Router();
-var logger = require('../../util/logger');
-var controller = require('./holidayController');
-var auth = require('../../auth/auth');
+const router = require('express').Router();
+const controller = require('./holidayController');
+const auth = require('../../auth/auth');
 
 // authentication middleware for secured routes
 const authMiddleware = [auth.decodeToken(), auth.refreshUser()];
@@ -24,12 +23,12 @@ router.param('id', controller.params);
 
 router.route('/')
   .get(controller.get) // get all dates
-  .post(controller.post) // add a new date
+  .post(authMiddleware, controller.post) // add a new date
 
 router.route('/:id')
   .get(controller.getOne) // get specific date
-  .put(controller.put) // update a date details (not users)
-  .delete(controller.delete) // delete a date
+  .put(authMiddleware, controller.put) // update a date details (not users)
+  .delete(authMiddleware, controller.delete) // delete a date
 
 
 module.exports = router;
