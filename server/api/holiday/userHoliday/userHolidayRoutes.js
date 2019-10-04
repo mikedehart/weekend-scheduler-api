@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const logger = require('../../../util/logger');
 const controller = require('./userHolidayController');
 const auth = require('../../../auth/auth');
 
@@ -13,6 +12,8 @@ const getUserId = (req, res, next) => {
 	}
 };
 
+const authMiddleware = [auth.decodeToken(), auth.refreshUser(), getUserId()];
+
 /*
 	Routes for user functions relating to dates:
 	add user, delete user, etc.
@@ -24,10 +25,10 @@ const getUserId = (req, res, next) => {
 router.param('id', controller.params)
 
 router.route('/')
-	.get(getUserId(), controller.get) // get all dates for specific user
+	.get(authMiddleware, controller.get) // get all dates for specific user
 
 router.route('/:id')
-	.put(getUserId(), controller.put) // add user to date
-	.delete(getUserId(), controller.delete) // delete user from date
+	.put(authMiddleware, controller.put) // add user to date
+	.delete(authMiddleware, controller.delete) // delete user from date
 
 module.exports = router;

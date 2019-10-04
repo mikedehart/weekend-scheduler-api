@@ -26,3 +26,9 @@ exports.ldap = (req, res, next) => {
 		res.redirect(302, clientURL);
 	}
 };
+
+exports.test = (req, res, next) => {
+	console.log("USER: ", req.user);
+	console.log("BODY: ", req.body);
+	res.json(req.user);
+};

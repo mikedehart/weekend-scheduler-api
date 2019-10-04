@@ -14,6 +14,7 @@ exports.decodeToken = () => {
 		}
 		// call next if token is valid, or send error if it is not.
 		// decoded token attached to req.user
+		console.log('in decodeToken: ', req.headers.authorization);
 		checkToken(req, res, next);
 	};
 };
@@ -26,6 +27,7 @@ exports.decodeToken = () => {
 // the database.
 exports.refreshUser = () => {
 	return (req, res, next) => {
+		console.log('in refresh: ', req.user);
 		if(!req.user) {
 			res.status(500);
 			next(new Error('No user information available'));
@@ -37,7 +39,6 @@ exports.refreshUser = () => {
 						res.status(401).send("No user with given id present.");
 					} else {
 						req.user = user;
-						user.updateLogin(user._id);
 						next();
 					}
 				})
@@ -85,6 +86,7 @@ exports.verifyUser = () => {
 						req.inum = iNumber;
 						next();
 					} else {
+						user.updateLogin(user._id);
 						req.user = user;
 						next();
 					}

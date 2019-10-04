@@ -21,13 +21,11 @@ const matchIds = (req, res) => {
 router.param('id', controller.params);
 
 router.route('/')
-  .get(controller.get) // get all dates
-  //.post(controller.post) // add a new date
+  .get(controller.get) // get all quarters
 
 router.route('/:id')
-  .get(controller.getOne) // get specific date
-  .put(controller.put) // update a quarter (unlock/lock qtr)
-  //.delete(controller.delete) // delete a date
+  .get(controller.getOne) // get specific quarter
+  .put(authMiddleware, controller.put) // update a quarter (unlock/lock qtr)
 
 
 module.exports = router;
