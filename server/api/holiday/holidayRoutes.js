@@ -23,7 +23,7 @@ router.param('id', controller.params);
 //TODO: secure routes and test?
 
 router.route('/')
-  .get(controller.get) // get all dates
+  .get(authMiddleware, controller.get) // get all dates
   .post(controller.post) // add a new date
 
 router.route('/:id')

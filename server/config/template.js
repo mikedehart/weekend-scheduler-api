@@ -13,9 +13,8 @@ module.exports = {
 		domain: 'WORK', // ldap domain information
 		domaincontroller: 'ldap://myurl.com:389' // ldap domain
 	},
-	client: {
-		url: 'http://myurl.com', // client machine url (front-end react app)
-		port: '80' // client port
+	host: {
+		url: `http://${os.hostname()}` // frontend machine URL. (FRONTEND/API MUST BE RUN ON SAME MACHINE TO SET COOKIE. See auth/controller.js)
 	},
 	logger: {
 		holidays: '/weekend/archive/holidays' // directory for archiving uploaded holiday files Note: Windows needs double slashes(\\).
