@@ -14,7 +14,6 @@ exports.decodeToken = () => {
 		}
 		// call next if token is valid, or send error if it is not.
 		// decoded token attached to req.user
-		console.log('in decodeToken: ', req.headers.authorization);
 		checkToken(req, res, next);
 	};
 };
@@ -27,7 +26,6 @@ exports.decodeToken = () => {
 // the database.
 exports.refreshUser = () => {
 	return (req, res, next) => {
-		console.log('in refresh: ', req.user);
 		if(!req.user) {
 			res.status(500);
 			next(new Error('No user information available'));
@@ -46,8 +44,6 @@ exports.refreshUser = () => {
 		}
 	}
 }
-
-
 
 // Authorize against LDAP server. Might prompt for username / pass?
 // Information is stored in res.locals.ntlm and req.ntlm if successful
