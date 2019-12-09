@@ -28,10 +28,10 @@ app.use((err, req, res, next) => {
 		logger.log('UnauthorizedError hit, redirecting to /ldap')
 		res.redirect('/auth/ldap');
 		return;
+	} else {
+		logger.error(err.stack);
+		res.status(500).send(err.stack);
 	}
-
-	logger.error(err.stack);
-	res.status(500).send(err.stack);
 });
 
 // export the app for testing

@@ -19,7 +19,7 @@ exports.decodeToken = () => {
 };
 
 
-// Called after decodeToken so we sill have a user
+// Called after decodeToken so we still have a user
 // attached to req.user. If JWT token was valid, but no
 // user details available, the user was changed or deleted
 // since issue of token. Get fresh user information from
@@ -27,14 +27,20 @@ exports.decodeToken = () => {
 exports.refreshUser = () => {
 	return (req, res, next) => {
 		if(!req.user) {
-			res.status(500);
-			next(new Error('No user information available'));
+			res.status(401).send("No user information available!");
+			//next(new Error('No user information available'));
 		} else {
 			let userId = req.user._id;
 			User.findById(userId)
 				.then((user) => {
 					if(!user) {
-						res.status(401).send("No user with given id present.");
+						// If user is not found, likely deleted and 
+						// old JWT hanging around. Send to controller
+						// and redirect to re-sign in.
+						//res.status(401).send("No user with given id present.");
+						//res.redirect('/auth/signin');
+						//next(new Error('No user with decoded ID. Maybe deleted?'));
+						res.status(401).send("No user with given ID present!");
 					} else {
 						req.user = user;
 						next();

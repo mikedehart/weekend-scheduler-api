@@ -8,10 +8,6 @@ const authMiddleware = [auth.decodeToken(), auth.refreshUser()];
 
 router.param('id', controller.params);
 
-router.route('/')
-  .get(controller.get) // get all users
-  .post(controller.post) // create new user
-
 router.route('/details')
 	.get(authMiddleware, controller.getUser) // Get current user using JWT
 
@@ -20,6 +16,10 @@ router.route('/write')
 
 router.route('/download/:file')
 	.get(controller.download) // Download iCal file
+
+router.route('/')
+  .get(controller.get) // get all users
+  .post(controller.post) // create new user
 
 router.route('/:id')
   .get(controller.getOne) // get single user by Id
