@@ -25,6 +25,6 @@ router.get('/signin', decode(), (req, res, next) => {
 
 // LDAP sign-in. First, check for JWT (above)
 // if doesn't exist, redirect here for LDAP signin
-router.all('/ldap', authMiddleware, controller.ldap);
+router.get('/ldap', authMiddleware, controller.ldap);
 
 module.exports = router;

@@ -30,14 +30,15 @@ exports.getOne = (req, res, next) => {
 // decodeToken() middleware needs to be called first.
 // Then, user id should be attached to req.user
 exports.getUser = (req, res, next) => {
-	if(!req.user._id) {
-		res.status(400).send('No ID!');
+	if(!req.user || !req.user._id) {
+		res.status(401).send('No ID!');
+
 	} else {
-		let id = req.user._id;
-		User.findById(id).then((user) => {
+		let userId = req.user._id;
+		User.findById(userId).then((user) => {
 			if(!user) {
-					// user doesn't exist. display login page.
-				res.status(404).send("User not found!");
+				// user doesn't exist. display login page.
+				res.status(401).send("User not found!");
 			} else {
 				res.json(user);
 			}
