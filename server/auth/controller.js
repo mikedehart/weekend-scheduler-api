@@ -11,7 +11,7 @@ exports.ldap = (req, res, next) => {
 	// Use config value as discrepancy between running on server
 	// and Windows machine (dev).
 	const clientURL = config.host.url;
-	if(!req.user) {
+	if (!req.user) {
 		const inum = req.inum;
 		console.log('Sending inum: ', inum);
 		console.log('Redirecting to', clientURL);

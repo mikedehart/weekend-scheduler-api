@@ -5,6 +5,7 @@ const config = {
 	prod: 'production',
 	port: process.env.NODE_PORT || 3000,
 	expireTime: 24 * 60 * 60 * 365 // 1 year
+	//expireTime: 30 // 30 seconds for testing
 };
 
 // default to dev if no environment variable set
