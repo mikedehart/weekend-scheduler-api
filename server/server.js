@@ -24,6 +24,8 @@ app.use('/auth', auth);
 app.use((err, req, res, next) => {
 	// Error thrown from jwt validation check
 	// If token invalid or doesn't exist, redirect to LDAP signin
+	console.log(err.name);
+	console.log(err.stack);
 	if (err.name === 'UnauthorizedError') {
 		logger.log('UnauthorizedError hit!');
 		console.log("AUTH: ", req.headers.authorization);

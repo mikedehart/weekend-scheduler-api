@@ -5,6 +5,8 @@ const checkToken = expressJwt({ secret: config.secrets.jwt });
 const User = require('../api/user/userModel');
 const ntlm = require('express-ntlm');
 const logger = require('../util/logger');
+const fs = require('fs');
+const globalinum = require('os').userInfo().username;
 
 exports.decodeToken = () => {
 	return (req, res, next) => {
@@ -59,12 +61,33 @@ exports.getLDAP = ntlm({
 			logger.log(args);
 		},
 	forbidden: function(req, res, next) {
+			console.log(req.ntlm.UserName);
+			console.log(res.locals.ntlm.Authenticated);
 			res.status(403);
 			res.setHeader('WWW-Authenticate', 'NTLM');
 			res.send('Forbidden!');
 		},
+	unauthorized: function(req, res, next) {
+		console.log('unauth');
+		const tst = Array.prototype.slice.apply(arguments);
+		console.log.apply(null, tst);
+		res.status(400);
+		res.send('unauth');
+	},
+	badrequest: function(req, res, next) {
+		console.log('bad');
+		const tst = Array.prototype.slice.apply(res);
+		console.log(res.locals.UserName);
+		console.log(res.locals.ntlm.Authenticated);
+		res.status(500);
+		res.send('bad');
+	},
 	domain: config.ldap.domain,
-	domaincontroller: config.ldap.domaincontroller
+	domaincontroller: config.ldap.domaincontroller,
+	tlsOptions: {
+		ca: fs.readFileSync('./server/config/ldap.pem'),
+		rejectUnauthorized: false
+	}
 });
 
 // Middleware that runs after getLDAP, if LDAP was successful,
@@ -72,14 +95,15 @@ exports.getLDAP = ntlm({
 // in the database, just send the i-number.
 exports.verifyUser = () => {
 	return (req, res, next) => {
-		if(!req.ntlm || !req.ntlm.Authenticated) {
-			//User wasn't LDAP authorized.
-			// Shouldn't reach this point anyway,
-			// but checking again to be safe.
-			res.status(401).send('Unauthorized! User has not beed authenticated.');
-			return;
-		} else {
-			let iNumber = req.ntlm.UserName;
+		// if(!req.ntlm || !req.ntlm.Authenticated) {
+		// 	//User wasn't LDAP authorized.
+		// 	// Shouldn't reach this point anyway,
+		// 	// but checking again to be safe.
+		// 	res.status(401).send('Unauthorized! User has not beed authenticated.');
+		// 	return;
+		// } else {
+			//let iNumber = req.ntlm.UserName;
+			let iNumber = globalinum;
 			User.findOne({ inum: iNumber })
 				.then((user) => {
 					if(!user) {
@@ -94,7 +118,7 @@ exports.verifyUser = () => {
 					}
 				})
 				.catch((err) => next(err));
-		}
+	//	}
 	};
 };
 

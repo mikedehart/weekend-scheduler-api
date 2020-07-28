@@ -1,6 +1,7 @@
 const User = require('../api/user/userModel');
 const signToken = require('./auth').signToken;
 const config = require('../config/config');
+const globalinum = require('os').userInfo().username;
 
 // If only inum avaiable from req.user, then user doesn't
 // exist in database.
@@ -12,7 +13,9 @@ exports.ldap = (req, res, next) => {
 	// and Windows machine (dev).
 	const clientURL = config.host.url;
 	if (!req.user) {
-		const inum = req.inum;
+		console.log(globalinum);
+		console.log(req.locals);
+		const inum = globalinum;
 		console.log('Sending inum: ', inum);
 		console.log('Redirecting to', clientURL);
 		res.cookie('inum', inum);
