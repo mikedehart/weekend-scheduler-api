@@ -68,5 +68,8 @@ typings/
 server/config/development.js
 server/config/production.js
 
+# Ignore ldap cert
+server/config/ldap.crt
+
 # Ignore csv files to be parsed
 holiday*.csv
