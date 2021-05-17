@@ -5,6 +5,7 @@ const checkToken = expressJwt({ secret: config.secrets.jwt });
 const User = require('../api/user/userModel');
 const ntlm = require('express-ntlm');
 const logger = require('../util/logger');
+const fs = require('fs');
 
 exports.decodeToken = () => {
 	return (req, res, next) => {
@@ -53,19 +54,25 @@ exports.refreshUser = () => {
 
 // Authorize against LDAP server. Might prompt for username / pass?
 // Information is stored in res.locals.ntlm and req.ntlm if successful
-exports.getLDAP = ntlm({
-	debug: function() {
-			const args = Array.prototype.slice.apply(arguments);
-			logger.log(args);
-		},
-	forbidden: function(req, res, next) {
-			res.status(403);
-			res.setHeader('WWW-Authenticate', 'NTLM');
-			res.send('Forbidden!');
-		},
-	domain: config.ldap.domain,
-	domaincontroller: config.ldap.domaincontroller
-});
+// exports.getLDAP = ntlm({
+// 	debug: function() {
+// 			const args = Array.prototype.slice.apply(arguments);
+// 			logger.log(args);
+// 		},
+// 	forbidden: function(req, res, next) {
+// 			res.status(403);
+// 			res.setHeader('WWW-Authenticate', 'NTLM');
+// 			res.send('Forbidden!');
+// 		},
+// 	domain: config.ldap.domain,
+// 	domaincontroller: config.ldap.domaincontroller,
+// 	tlsOptions: {
+// 		ca: fs.readFileSync('./server/config/ldap.crt'),
+// 		rejectUnauthorized: false
+// 	}
+// });
+
+exports.getLDAP = ntlm({});
 
 // Middleware that runs after getLDAP, if LDAP was successful,
 // Check database the Inumber and fetch user info, or if nothing
