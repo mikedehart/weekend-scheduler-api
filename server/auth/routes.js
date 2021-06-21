@@ -19,7 +19,6 @@ router.get('/signin', decode(), (req, res, next) => {
 	} else {
 		console.log(req.referer);
 	}
-	console.log(req.user);
 	res.json(req.user);
 });
 

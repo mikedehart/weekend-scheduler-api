@@ -74,19 +74,34 @@ exports.refreshUser = () => {
 
 exports.getLDAP = ntlm({});
 
+// To debug NTLM:
+// exports.getLDAP = ntlm({
+// 	debug: function() {
+// 		const args = Array.prototype.slice.apply(arguments);
+// 		console.log.apply(null, args);
+// 		console.log('in debug...');
+// 	}
+	
+// });
+
+
 // Middleware that runs after getLDAP, if LDAP was successful,
 // Check database the Inumber and fetch user info, or if nothing
 // in the database, just send the i-number.
 exports.verifyUser = () => {
 	return (req, res, next) => {
+		//To check NTLM response:
+		// res.end(JSON.stringify(req.ntlm));
 		if(!req.ntlm || !req.ntlm.Authenticated) {
 			//User wasn't LDAP authorized.
 			// Shouldn't reach this point anyway,
 			// but checking again to be safe.
+			console.log('NTLM Unauth: ', req.user);
 			res.status(401).send('Unauthorized! User has not beed authenticated.');
 			return;
 		} else {
 			let iNumber = req.ntlm.UserName;
+			logger.log("inum: ", iNumber);
 			User.findOne({ inum: iNumber })
 				.then((user) => {
 					if(!user) {
