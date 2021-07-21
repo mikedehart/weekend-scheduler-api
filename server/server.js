@@ -19,7 +19,6 @@ require('./middleware/middleware')(app);
 // Setup API and Auth routes
 app.use('/api', api);
 app.use('/auth', auth);
-
 // Global error handling
 app.use((err, req, res, next) => {
 	// Error thrown from jwt validation check

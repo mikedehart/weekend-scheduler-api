@@ -12,6 +12,7 @@ const config = {
 process.env.NODE_ENV = process.env.NODE_ENV || config.dev;
 config.env = process.env.NODE_ENV;
 
+
 let envConfig;
 
 // If file doesn't exist, require could error out
