@@ -44,7 +44,7 @@ const userSchema = new Schema({
 });
 
 function productLimit(val) {
-	return (['ASE','IQ','REP'].indexOf(val) > -1);
+	return (['ASE','IQ','REP', 'BRAZIL'].indexOf(val) > -1);
 }
 
 function designationLimit(val) {

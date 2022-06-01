@@ -60,7 +60,7 @@ function peopleLimit(val) {
 }
 
 function productLimit(val) {
-	return (['ASE','IQ','REP'].indexOf(val) > -1);
+	return (['ASE','IQ','REP', 'BRAZIL'].indexOf(val) > -1);
 }
 
 module.exports = mongoose.model('holiday', holidaySchema);

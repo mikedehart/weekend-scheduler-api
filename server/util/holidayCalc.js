@@ -44,7 +44,7 @@ exports.addHolidays = (holidays) => {
 		// Logging file
 		const holidayYear = _dates[0].year;
 		const archivedFile = `${config.logger.holidays}holidays_${holidayYear}.csv`;
-		const products = ['ASE', 'IQ', 'REP'];
+		const products = ['ASE', 'IQ', 'REP', 'BRAZIL'];
 		try {
 			_dates.forEach((holiday) => {
 				products.forEach((prod) => {

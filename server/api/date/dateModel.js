@@ -30,7 +30,7 @@ const dateSchema = new Schema({
 	},
 	product: {
 		type: String,
-		maxlength: 3,
+		maxlength: 6,
 		required: true,
 		index: true,
 		validate: [productLimit, 'Invalid product!']
@@ -51,7 +51,7 @@ function peopleLimit(val) {
 }
 
 function productLimit(val) {
-	return (['ASE','IQ','REP'].indexOf(val) > -1);
+	return (['ASE','IQ','REP', 'BRAZIL'].indexOf(val) > -1);
 }
 
 module.exports = mongoose.model('date', dateSchema);
