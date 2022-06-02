@@ -12,9 +12,7 @@ const config = {
 process.env.NODE_ENV = process.env.NODE_ENV || config.dev;
 config.env = process.env.NODE_ENV;
 
-
 let envConfig;
-
 // If file doesn't exist, require could error out
 try {
 	envConfig = require('./' + config.env);
@@ -25,4 +23,5 @@ try {
 }
 // merge two config files together. envConfig will overwrite
 // redundancies on config object.
+
 module.exports = _.merge(config, envConfig);
