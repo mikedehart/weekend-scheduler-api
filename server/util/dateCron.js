@@ -19,8 +19,8 @@ const fs = require('fs');
 
 // Updates at 9pm on 1st of Oct for the next year.
 // 30-second job for testing
-let job = new CronJob('30 * * * * *', function() {
-//let dateJob = new CronJob('00 00 21 01 09 *', function() {
+//let job = new CronJob('30 * * * * *', function() {
+let dateJob = new CronJob('00 00 21 01 09 *', function() {
 	let date = new Date();
 	//let yr = date.getFullYear() +1;
 	// testing for same year
@@ -57,9 +57,9 @@ let job = new CronJob('30 * * * * *', function() {
  *********************/
 
 // 30-second job for testing
-let job2 = new CronJob('10 * * * * *', function() {
+//let job2 = new CronJob('10 * * * * *', function() {
 // Runs every Friday at 9pm
-//let holidayJob = new CronJob('00 00 21 * * 05', function() {
+let holidayJob = new CronJob('00 00 21 * * 05', function() {
 	if(fs.existsSync('holidays.csv')) {
 		const holidayArray = holidays.readHolidays('holidays.csv');
 		if(holidayArray) {
