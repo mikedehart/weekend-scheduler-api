@@ -73,3 +73,6 @@ server/config/ldap.crt
 
 # Ignore csv files to be parsed
 holiday*.csv
+
+# Ignore notes md file
+NOTES.md
