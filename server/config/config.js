@@ -1,5 +1,7 @@
 const _ = require('lodash');
 
+// Main config file
+
 const config = {
 	dev: 'development',
 	prod: 'production',
